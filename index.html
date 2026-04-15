@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlipUp — Capta 3 Propiedades Este Mes con un Sistema Automatizado</title>
+<meta name="description" content="Sistema de captación automatizado para inmobiliarias en México. Propietarios que llegan a ti. Sin llamadas en frío. Garantía firmada en contrato.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --black:      #000000;
+  --dark:       #0A0A0A;
+  --card:       #111111;
+  --card2:      #161616;
+  --border:     #222222;
+  --orange:     #FFA500;
+  --orange2:    #FFB733;
+  --orange-dim: rgba(255,165,0,.1);
+  --purple:     #7B2FFF;
+  --purple2:    #9B5FFF;
+  --purple-dim: rgba(123,47,255,.1);
+  --white:      #FFFFFF;
+  --offwhite:   #F0EFE9;
+  --muted:      #666666;
+  --text:       #BBBBBB;
+  --green:      #22C55E;
+  --red:        #EF4444;
+  --radius:     10px;
+}
+
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--black);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+h1 { font-size: clamp(2.4rem, 6.5vw, 5rem); font-weight: 800; }
+h2 { font-size: clamp(1.75rem, 4vw, 2.9rem); font-weight: 700; }
+p  { line-height: 1.7; font-weight: 400; }
+
+.container { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+section { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────
+   LOGO
+───────────────────────────────────────── */
+.logo        { font-weight: 700; letter-spacing: -.03em; }
+.logo .flip  { color: var(--white); }
+.logo .upwrd { color: var(--orange); font-style: italic; }
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 14px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: border-color .3s;
+}
+nav .logo { font-size: 1.3rem; }
+
+.nav-btn {
+  background: var(--orange);
+  color: var(--black);
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  font-size: .82rem; font-weight: 700;
+  text-decoration: none;
+  transition: background .15s, transform .15s, box-shadow .15s;
+  box-shadow: 0 2px 12px rgba(255,165,0,.2);
+}
+.nav-btn:hover { background: var(--orange2); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(255,165,0,.35); }
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+#hero {
+  min-height: 100svh;
+  display: flex; align-items: center;
+  padding: 120px 24px 80px;
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 10%, rgba(123,47,255,.1) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 45% at 20% 80%, rgba(255,165,0,.08) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, rgba(255,165,0,.03) 0%, transparent 70%),
+    var(--black);
+  overflow: hidden;
+}
+.hero-inner { max-width: 860px; margin: 0 auto; text-align: center; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--orange-dim);
+  border: 1px solid rgba(255,165,0,.22);
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: .72rem; font-weight: 600;
+  color: var(--orange);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 34px;
+  box-shadow: 0 0 30px rgba(255,165,0,.08);
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  background: var(--orange); border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.2; transform:scale(1.5); }
+}
+
+h1 { color: var(--white); }
+h1 .hl { color: var(--orange); }
+
+.hero-sub {
+  font-size: clamp(.93rem, 2vw, 1.18rem);
+  color: var(--muted);
+  margin: 22px auto 38px;
+  max-width: 560px;
+  line-height: 1.65;
+}
+
+/* ── CTA buttons ── */
+.cta-row {
+  display: flex; flex-wrap: wrap;
+  justify-content: center; gap: 12px;
+  margin-bottom: 54px;
+}
+
+.btn-orange {
+  background: var(--orange); color: var(--black);
+  padding: 15px 32px; border-radius: var(--radius);
+  font-size: .95rem; font-weight: 700;
+  text-decoration: none;
+  transition: all .2s; display: inline-block;
+}
+.btn-orange:hover {
+  background: var(--orange2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(255,165,0,.26);
+}
+
+.btn-purple {
+  background: var(--purple); color: var(--white);
+  padding: 15px 32px; border-radius: var(--radius);
+  font-size: .95rem; font-weight: 600;
+  text-decoration: none;
+  transition: all .2s;
+}
+.btn-purple:hover { background: var(--purple2); transform: translateY(-2px); }
+
+/* ── Stats bar ── */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  max-width: 680px; margin: 0 auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,.4), 0 0 80px rgba(255,165,0,.04);
+}
+.stat { background: var(--card); padding: 22px 14px; text-align: center; }
+.stat-n {
+  font-size: clamp(1.55rem, 4vw, 2.4rem);
+  font-weight: 800; color: var(--orange);
+  display: block; letter-spacing: -.03em;
+}
+.stat-l { font-size: .72rem; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+
+/* ─────────────────────────────────────────
+   SECTION HEADER
+───────────────────────────────────────── */
+.sh { text-align: center; margin-bottom: 52px; }
+.lbl {
+  font-size: .68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2.5px;
+  color: var(--orange); margin-bottom: 10px;
+}
+.sh h2 { color: var(--white); margin-bottom: 12px; }
+.sh p   { color: var(--muted); font-size: .98rem; max-width: 500px; margin: 0 auto; }
+
+/* ─────────────────────────────────────────
+   PROBLEMA
+───────────────────────────────────────── */
+#problema {
+  padding: 96px 24px;
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+.comp-wrap {
+  max-width: 860px; margin: 0 auto;
+  border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+}
+.comp-head {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+}
+.ch { padding: 16px 26px; font-size: .77rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.ch.bad  { color: var(--red);   background: rgba(239,68,68,.07);  border-bottom: 1px solid rgba(239,68,68,.12); }
+.ch.good { color: var(--green); background: rgba(34,197,94,.07);  border-bottom: 1px solid rgba(34,197,94,.12); }
+
+.comp-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.cc { background: var(--card); padding: 16px 26px; font-size: .86rem; display: flex; gap: 10px; align-items: flex-start; }
+.cc em { flex-shrink: 0; font-style: normal; font-size: .94rem; margin-top: 1px; }
+.cc.bad  { color: var(--muted); }
+.cc.good { color: var(--text); }
+
+.alert-stat {
+  background: var(--card);
+  border: 1px solid rgba(239,68,68,.18);
+  border-radius: 12px; padding: 22px 28px;
+  text-align: center; max-width: 540px; margin: 38px auto 0;
+}
+.alert-stat strong {
+  display: block;
+  font-size: clamp(1.05rem, 2.8vw, 1.5rem);
+  font-weight: 700; color: var(--white); margin-bottom: 6px;
+}
+.alert-stat strong span { color: var(--red); }
+.alert-stat small { color: var(--muted); font-size: .82rem; }
+
+/* ─────────────────────────────────────────
+   SOLUCIÓN
+───────────────────────────────────────── */
+#solucion {
+  padding: 96px 24px;
+  background:
+    radial-gradient(ellipse 40% 30% at 50% 80%, rgba(123,47,255,.05) 0%, transparent 70%),
+    var(--dark);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.steps {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+  gap: 1px; background: var(--border);
+  max-width: 940px; margin: 52px auto 0;
+  border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+}
+.sc {
+  background: var(--card); padding: 30px 24px; text-align: left;
+  transition: background .2s; position: relative; overflow: hidden;
+}
+.sc:hover { background: var(--card2); }
+.sc-num  { font-size: 3.2rem; font-weight: 800; color: rgba(255,165,0,.1); line-height: 1; margin-bottom: 10px; }
+.sc-ico  { font-size: 1.55rem; display: block; margin-bottom: 12px; }
+.sc-ttl  { color: var(--white); font-size: .95rem; font-weight: 700; margin-bottom: 7px; }
+.sc-txt  { color: var(--muted); font-size: .82rem; line-height: 1.6; }
+.sc-line {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--orange));
+  transform: scaleX(0); transform-origin: left; transition: transform .3s;
+}
+.sc:hover .sc-line { transform: scaleX(1); }
+
+/* ─────────────────────────────────────────
+   PLAZAS AVISO
+───────────────────────────────────────── */
+.plazas-aviso {
+  max-width: 700px; margin: 0 auto 52px;
+  background: var(--card);
+  border: 1px solid rgba(123,47,255,.3);
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: flex; align-items: flex-start; gap: 14px;
+  text-align: left;
+}
+.plazas-aviso .icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.plazas-aviso p    { font-size: .86rem; color: var(--text); line-height: 1.6; }
+.plazas-aviso strong { color: var(--orange); }
+
+/* ─────────────────────────────────────────
+   PROGRAMAS
+───────────────────────────────────────── */
+#programas {
+  padding: 96px 24px;
+  background: var(--black);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.prog-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px; max-width: 900px; margin: 0 auto;
+}
+
+.pc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  text-align: left; transition: transform .25s, border-color .25s;
+}
+.pc:hover { transform: translateY(-4px); border-color: rgba(255,165,0,.3); }
+.pc.feat  { border-color: var(--purple); box-shadow: 0 0 50px rgba(123,47,255,.1), 0 0 100px rgba(123,47,255,.05); }
+.pc.feat:hover { border-color: var(--purple2); box-shadow: 0 0 60px rgba(123,47,255,.15), 0 0 120px rgba(123,47,255,.08); transform: translateY(-6px); }
+
+.pc-head { padding: 26px; }
+.pc-tag {
+  display: inline-block;
+  font-size: .65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 4px 12px; border-radius: 100px; margin-bottom: 14px;
+}
+.pc-tag.com  { background: rgba(255,255,255,.05); color: var(--muted); }
+.pc-tag.pro  { background: var(--purple); color: var(--white); }
+
+.pc-name { color: var(--white); font-size: 1.2rem; font-weight: 700; margin-bottom: 7px; }
+.pc-desc { color: var(--muted); font-size: .83rem; line-height: 1.55; }
+
+.pc-highlight {
+  padding: 16px 26px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,165,0,.04);
+}
+.pc-highlight.pro-hl {
+  background: linear-gradient(135deg, rgba(123,47,255,.08), rgba(255,165,0,.06));
+  border-top-color: rgba(123,47,255,.2);
+  border-bottom-color: rgba(123,47,255,.2);
+}
+.ph-icon { font-size: 1.3rem; flex-shrink: 0; }
+.ph-text { font-size: .85rem; font-weight: 600; color: var(--orange); letter-spacing: .02em; }
+
+.pc-list { padding: 26px; }
+.pc-list ul { list-style: none; }
+.pc-list li {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px 0; font-size: .84rem;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  color: var(--text);
+}
+.pc-list li:last-child { border-bottom: none; }
+.pc-list li::before    { content: '✓'; color: var(--orange); font-weight: 700; flex-shrink: 0; }
+.pc-list li.hi         { color: var(--orange); font-weight: 600; }
+.pc-list li.hi::before { color: var(--purple); }
+
+.pc-cta { padding: 0 26px 26px; }
+.pc-btn {
+  display: block; text-align: center;
+  padding: 13px; border-radius: var(--radius);
+  font-weight: 700; font-size: .9rem;
+  text-decoration: none; transition: all .2s;
+}
+.pc-btn.out          { border: 1px solid var(--border); color: var(--text); }
+.pc-btn.out:hover    { border-color: var(--orange); color: var(--orange); }
+.pc-btn.fill         { background: var(--purple); color: var(--white); box-shadow: 0 4px 20px rgba(123,47,255,.25); }
+.pc-btn.fill:hover   { background: var(--purple2); box-shadow: 0 6px 30px rgba(123,47,255,.4); transform: translateY(-2px); }
+
+/* ─────────────────────────────────────────
+   GARANTÍA
+───────────────────────────────────────── */
+#garantia {
+  padding: 80px 24px;
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+}
+.guar-inner { max-width: 740px; margin: 0 auto; text-align: center; }
+
+.contract {
+  background: var(--card);
+  border: 1px solid rgba(123,47,255,.32);
+  border-radius: 14px; padding: 38px 36px; margin-top: 36px;
+  position: relative;
+  box-shadow: 0 0 60px rgba(123,47,255,.08), 0 20px 60px rgba(0,0,0,.3);
+}
+.ctag {
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  background: var(--purple); color: var(--white);
+  font-size: .64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+  padding: 4px 14px; border-radius: 100px; white-space: nowrap;
+}
+.contract-txt {
+  font-size: clamp(.9rem, 2.2vw, 1.15rem);
+  font-style: italic; color: var(--offwhite);
+  line-height: 1.7; margin-bottom: 28px;
+}
+.contract-txt strong { color: var(--orange); font-style: normal; }
+
+.gstats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+.gs { background: var(--card2); padding: 22px 12px; text-align: center; }
+.gs-n { font-size: 1.9rem; font-weight: 800; color: var(--orange); display: block; letter-spacing: -.04em; }
+.gs-l { font-size: .71rem; color: var(--muted); line-height: 1.4; margin-top: 4px; }
+
+/* ─────────────────────────────────────────
+   GLOW EFFECTS & ENHANCED VISUALS
+───────────────────────────────────────── */
+.glow-orange {
+  box-shadow: 0 0 60px rgba(255,165,0,.12), 0 0 120px rgba(255,165,0,.05);
+}
+.glow-purple {
+  box-shadow: 0 0 60px rgba(123,47,255,.12), 0 0 120px rgba(123,47,255,.05);
+}
+
+/* Gradient text for headings */
+.gradient-text {
+  background: linear-gradient(135deg, var(--orange), var(--purple2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Pulse glow for CTA */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255,165,0,.2); }
+  50% { box-shadow: 0 8px 40px rgba(255,165,0,.4); }
+}
+.btn-orange { animation: pulseGlow 3s ease-in-out infinite; }
+.btn-orange:hover { animation: none; }
+
+/* ─────────────────────────────────────────
+   PRUEBA SOCIAL
+───────────────────────────────────────── */
+#prueba {
+  padding: 96px 24px;
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.metrics {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(168px,1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+  max-width: 800px; margin: 44px auto 0;
+}
+.mb { background: var(--card); padding: 28px 16px; text-align: center; transition: background .2s, transform .2s; }
+.mb:hover { background: var(--card2); transform: scale(1.02); }
+.mn { font-size: clamp(1.65rem, 4vw, 2.4rem); font-weight: 800; color: var(--orange); line-height: 1; letter-spacing: -.04em; }
+.ml { font-size: .72rem; color: var(--muted); margin-top: 7px; line-height: 1.4; }
+
+/* ─────────────────────────────────────────
+   FAQ
+───────────────────────────────────────── */
+#faq {
+  padding: 96px 24px;
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+.faq-in { max-width: 660px; margin: 0 auto; }
+.fi { border-bottom: 1px solid var(--border); }
+.fi summary {
+  color: var(--white); font-size: .94rem; font-weight: 600;
+  cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  list-style: none; padding: 21px 0; user-select: none;
+  transition: color .15s;
+}
+.fi summary:hover { color: var(--orange); }
+.fi summary::-webkit-details-marker { display: none; }
+.fi summary::after { content: '+'; font-size: 1.3rem; color: var(--orange); flex-shrink: 0; font-weight: 300; transition: transform .25s; }
+.fi[open] summary::after { transform: rotate(45deg); }
+.fi p { color: var(--muted); font-size: .86rem; line-height: 1.7; padding-bottom: 20px; padding-right: 22px; }
+
+/* ─────────────────────────────────────────
+   FINAL CTA
+───────────────────────────────────────── */
+#final {
+  padding: 110px 24px 90px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(123,47,255,.1) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 50% 0%, rgba(255,165,0,.05) 0%, transparent 60%),
+    var(--black);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+#final h2 { color: var(--white); margin-bottom: 14px; }
+#final p  { color: var(--muted); font-size: 1rem; max-width: 480px; margin: 0 auto 38px; }
+.cta-note { font-size: .75rem; color: var(--muted); margin-top: 14px; }
+
+/* smile decorativo */
+.smile-deco {
+  display: block; width: 32px; height: 16px;
+  border: 3px solid var(--purple); border-top: none;
+  border-radius: 0 0 32px 32px;
+  margin: 0 auto 16px;
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  padding: 36px 24px;
+  border-top: 1px solid var(--border);
+  text-align: center; color: var(--muted);
+  font-size: .76rem; background: var(--dark);
+}
+.footer-logo { font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 10px; }
+.footer-logo .flip  { color: var(--white); }
+.footer-logo .upwrd { color: var(--orange); font-style: italic; }
+
+/* ─────────────────────────────────────────
+   WHATSAPP FLOAT
+───────────────────────────────────────── */
+.waf {
+  position: fixed; bottom: 24px; right: 24px; z-index: 300;
+  background: #25D366; color: #fff;
+  width: 54px; height: 54px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(37,211,102,.4);
+  transition: transform .2s, box-shadow .2s;
+}
+.waf:hover { transform: scale(1.1); box-shadow: 0 6px 26px rgba(37,211,102,.55); }
+
+/* ─────────────────────────────────────────
+   REVEAL ANIMATION
+───────────────────────────────────────── */
+.rv { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.rv.vis { opacity: 1; transform: none; }
+.d1 { transition-delay: .08s; }
+.d2 { transition-delay: .16s; }
+.d3 { transition-delay: .24s; }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE MOBILE
+───────────────────────────────────────── */
+@media (max-width: 760px) {
+  nav { padding: 12px 18px; }
+  .nav-btn { padding: 8px 14px; font-size: .77rem; }
+
+  #hero { padding: 96px 18px 56px; }
+  .stats-bar { grid-template-columns: 1fr; max-width: 300px; }
+  .stat { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; }
+  .stat-n { font-size: 1.5rem; }
+
+  .comp-head { grid-template-columns: 1fr; }
+  .ch.good { display: none; }
+  .comp-row { grid-template-columns: 1fr; }
+  .cc.bad::before  { content: '✕  '; color: var(--red);   font-weight: 700; }
+  .cc.good::before { content: '✓  '; color: var(--green); font-weight: 700; }
+
+  .steps { grid-template-columns: 1fr; }
+
+  .prog-grid { grid-template-columns: 1fr; }
+
+  .gstats { grid-template-columns: 1fr; }
+
+  .metrics { grid-template-columns: 1fr 1fr; }
+
+  .contract { padding: 28px 18px; }
+  .plazas-aviso { flex-direction: column; }
+}
+
+@media (max-width: 440px) {
+  .cta-row { flex-direction: column; align-items: stretch; }
+  .btn-orange, .btn-purple { text-align: center; }
+  .metrics { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="logo" style="font-size:1.3rem">
+    <span class="flip">Flip</span><span class="upwrd">Up</span>
+  </div>
+  <a href="#final" class="nav-btn">Diagnóstico gratis</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="badge"><span class="badge-dot"></span>Sistema activo · Plazas limitadas este mes</div>
+
+    <h1>
+      Capta <span class="hl">3 Propiedades</span><br>
+      Este Mes con un Sistema<br>
+      Automatizado.
+    </h1>
+
+    <p class="hero-sub">
+      El sistema automatizado que invierte la dinámica:<br>
+      el propietario llega a ti. Sin llamadas en frío.<br>
+      Garantía firmada en contrato.
+    </p>
+
+    <div class="cta-row">
+      <a href="#final" class="btn-orange">Reservar diagnóstico gratuito →</a>
+      <a href="#programas" class="btn-purple">Ver programas</a>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-n">+385</span>
+        <span class="stat-l">Leads generados en<br>4 semanas · Monterrey</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">60+</span>
+        <span class="stat-l">Leads cualificados<br>garantizados al mes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">&lt;2 min</span>
+        <span class="stat-l">Notificación automática<br>de cada nuevo lead</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROBLEMA ─── -->
+<section id="problema">
+  <div class="container">
+    <div class="sh rv">
+      <div class="lbl">El problema real</div>
+      <h2>Tu método de captación<br>está obsoleto.</h2>
+      <p>El mercado en México no está difícil — se venden más de 300,000 propiedades al año. El problema es el sistema que usas.</p>
+    </div>
+
+    <div class="comp-wrap rv">
+      <div class="comp-head">
+        <div class="ch bad">❌ Modelo tradicional</div>
+        <div class="ch good">✅ Modelo FlipUp</div>
+      </div>
+      <div class="comp-row">
+        <div class="cc bad"><em>💸</em>Portales caros, leads fríos de baja calidad</div>
+        <div class="cc good"><em>🎯</em>Leads de propietarios en urgencia real</div>
+      </div>
+      <div class="comp-row">
+        <div class="cc bad"><em>🎲</em>Boca a boca impredecible, no escala</div>
+        <div class="cc good"><em>⚙️</em>Flujo constante y completamente automatizado</div>
+      </div>
+      <div class="comp-row">
+        <div class="cc bad"><em>📞</em>Llamadas en frío con 95% de rechazo</div>
+        <div class="cc good"><em>📩</em>Propietario que ya levantó la mano</div>
+      </div>
+      <div class="comp-row">
+        <div class="cc bad"><em>⏰</em>Respuesta manual, horas después</div>
+        <div class="cc good"><em>⚡</em>Notificación automática en menos de 2 minutos</div>
+      </div>
+      <div class="comp-row">
+        <div class="cc bad"><em>📉</em>Sin datos, sin previsión de resultados</div>
+        <div class="cc good"><em>📊</em>Calculadora de ROI por operación en tiempo real</div>
+      </div>
+    </div>
+
+    <div class="alert-stat rv d1">
+      <strong>La tasa de conversión cae <span>un 300%</span> si no contactas en 24 horas.</strong>
+      <small>El propietario llama a 3–4 agencias. La primera que responde se lleva la exclusiva.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SOLUCIÓN ─── -->
+<section id="solucion">
+  <div class="container">
+    <div class="sh rv">
+      <div class="lbl">El sistema FlipUp</div>
+      <h2>Cómo funciona<br>el sistema.</h2>
+      <p>4 pasos que automatizan tu captación de principio a fin.</p>
+    </div>
+    <div class="steps">
+      <div class="sc rv d1">
+        <span class="sc-ico">📡</span>
+        <div class="sc-num">01</div>
+        <div class="sc-ttl">Atracción automatizada</div>
+        <div class="sc-txt">Meta Ads en Facebook e Instagram para llegar a propietarios en fase de decisión — los que quieren vender pero todavía no publicaron en ningún portal.</div>
+        <div class="sc-line"></div>
+      </div>
+      <div class="sc rv d2">
+        <span class="sc-ico">🎯</span>
+        <div class="sc-num">02</div>
+        <div class="sc-ttl">Lead cualificado</div>
+        <div class="sc-txt">El propietario llena un formulario corto. Solo pasan los que están activamente buscando vender. Sin curiosos ni leads fríos.</div>
+        <div class="sc-line"></div>
+      </div>
+      <div class="sc rv d3">
+        <span class="sc-ico">⚡</span>
+        <div class="sc-num">03</div>
+        <div class="sc-ttl">Notificación en &lt;2 min</div>
+        <div class="sc-txt">Recibes una notificación automática por WhatsApp con los datos del propietario en menos de 2 minutos. Tú solo tienes que llamar.</div>
+        <div class="sc-line"></div>
+      </div>
+      <div class="sc rv d1">
+        <span class="sc-ico">🤝</span>
+        <div class="sc-num">04</div>
+        <div class="sc-ttl">Seguimiento automático</div>
+        <div class="sc-txt">El CRM preconfigurado gestiona el seguimiento. Recordatorios, nurturing y métricas en tiempo real sin trabajo manual.</div>
+        <div class="sc-line"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROGRAMAS ─── -->
+<section id="programas">
+  <div class="container">
+    <div class="sh rv">
+      <div class="lbl">Nuestros programas</div>
+      <h2>Elige cómo empezar.</h2>
+      <p>Dos caminos según tu nivel y objetivos. El mismo sistema probado en ambos.</p>
+    </div>
+
+    <!-- AVISO PLAZAS -->
+    <div class="plazas-aviso rv">
+      <span class="icon">🗓️</span>
+      <p>
+        <strong>Plazas de implementación limitadas este mes.</strong>
+        Cada cliente recibe una implementación personalizada y acompañamiento directo. Para mantener la calidad del proceso, las incorporaciones que superen la capacidad del mes se planifican para el mes siguiente.
+      </p>
+    </div>
+
+    <div class="prog-grid">
+
+      <!-- Comunidad -->
+      <div class="pc rv d1">
+        <div class="pc-head">
+          <div class="pc-tag com">👥 Comunidad</div>
+          <div class="pc-name">Programa Comunidad</div>
+          <div class="pc-desc">Para quien quiere aprender el sistema y operar con él de forma independiente.</div>
+        </div>
+        <div class="pc-highlight">
+          <span class="ph-icon">🎓</span>
+          <span class="ph-text">Aprende · Implementa · Crece a tu ritmo</span>
+        </div>
+        <div class="pc-list">
+          <ul>
+            <li>Formación completa del método FlipUp en vídeo</li>
+            <li>Calculadora de rentabilidad con IA por propiedad</li>
+            <li>Plantillas y scripts de negociación probados</li>
+            <li>CRM preconfigurado y mantenido por FlipUp</li>
+            <li>Automatización GoHighLevel: WhatsApp + Instagram</li>
+            <li>Comunidad privada + 2 sesiones grupales al mes</li>
+          </ul>
+        </div>
+        <div class="pc-cta">
+          <a href="#final" class="pc-btn out">Solicitar información →</a>
+        </div>
+      </div>
+
+      <!-- Pro -->
+      <div class="pc feat rv d2">
+        <div class="pc-head" style="background:linear-gradient(135deg,rgba(123,47,255,.08),transparent)">
+          <div class="pc-tag pro">🚀 Más popular</div>
+          <div class="pc-name" style="color:var(--orange)">Programa Pro</div>
+          <div class="pc-desc">Para agencias que ya operan y necesitan escalar con resultados garantizados.</div>
+        </div>
+        <div class="pc-highlight pro-hl">
+          <span class="ph-icon">⚡</span>
+          <span class="ph-text">Garantía firmada · Resultados desde el mes 1</span>
+        </div>
+        <div class="pc-list">
+          <ul>
+            <li>Todo el Programa Comunidad incluido</li>
+            <li>Campañas Meta Ads gestionadas por FlipUp</li>
+            <li>Mínimo 60 leads cualificados de propietarios al mes</li>
+            <li>Notificación automática WhatsApp en &lt;2 minutos</li>
+            <li>Sesión estratégica 1-a-1 mensual + revisión de métricas</li>
+            <li class="hi">Garantía firmada: 3 propiedades mes 1 o mes 2 gratis</li>
+          </ul>
+        </div>
+        <div class="pc-cta">
+          <a href="#final" class="pc-btn fill">Reservar diagnóstico gratuito →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── GARANTÍA ─── -->
+<section id="garantia">
+  <div class="guar-inner rv">
+    <div class="lbl" style="margin-bottom:10px">Garantía única en México</div>
+    <h2 style="color:var(--white)">Nadie más firma esto.</h2>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);max-width:280px;margin:22px auto 0;opacity:.4"></div>
+    <div class="contract">
+      <span class="ctag">Cláusula de garantía · FlipUp Pro</span>
+      <p class="contract-txt">
+        "FlipUp se compromete a entregar un mínimo de <strong>60 leads cualificados</strong> de propietarios en urgencia durante el primer mes. Siempre y cuando el cliente atienda los leads en menos de 24 horas, garantizamos un mínimo de <strong>3 propiedades captadas</strong>. En caso contrario, el <strong>segundo mes es gratuito</strong>."
+      </p>
+      <div class="gstats">
+        <div class="gs"><span class="gs-n">60</span><span class="gs-l">leads cualificados<br>mínimo por mes</span></div>
+        <div class="gs"><span class="gs-n">3</span><span class="gs-l">propiedades captadas<br>garantizadas mes 1</span></div>
+        <div class="gs"><span class="gs-n">Gratis</span><span class="gs-l">mes 2 si no<br>cumplimos la garantía</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── PRUEBA SOCIAL ─── -->
+<section id="prueba">
+  <div class="container">
+    <div class="sh rv">
+      <div class="lbl">Resultados reales</div>
+      <h2>El sistema funcionando<br>ahora mismo.</h2>
+    </div>
+    <div class="metrics">
+      <div class="mb rv d1"><div class="mn">+385</div><div class="ml">Leads generados en 4 semanas<br>1 cliente · Monterrey</div></div>
+      <div class="mb rv d2"><div class="mn">60+</div><div class="ml">Leads cualificados<br>garantizados al mes</div></div>
+      <div class="mb rv d3"><div class="mn">7</div><div class="ml">Clientes activos<br>con el sistema hoy</div></div>
+      <div class="mb rv d1"><div class="mn">&lt;24h</div><div class="ml">Tiempo promedio para<br>captar la primera propiedad</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section id="faq">
+  <div class="faq-in">
+    <div class="sh rv">
+      <div class="lbl">Preguntas frecuentes</div>
+      <h2 style="color:var(--white)">Resolvemos<br>tus dudas.</h2>
+    </div>
+    <details class="fi rv">
+      <summary>¿Necesito experiencia previa en publicidad digital?</summary>
+      <p>No. En el Programa Pro nos encargamos de crear, gestionar y optimizar todas las campañas de Meta Ads por ti. Tú solo recibes los leads y los contactas. En el Programa Comunidad te enseñamos paso a paso cómo hacerlo tú mismo.</p>
+    </details>
+    <details class="fi rv">
+      <summary>¿Cuándo empiezo a ver resultados?</summary>
+      <p>Los primeros leads suelen llegar en los primeros 7 días de campaña activa. En el Programa Pro garantizamos un mínimo de 60 leads cualificados y 3 propiedades captadas en el primer mes, o el segundo mes es completamente gratis.</p>
+    </details>
+    <details class="fi rv">
+      <summary>¿Funciona en cualquier ciudad de México?</summary>
+      <p>Sí. El sistema está validado en CDMX, Monterrey, Guadalajara y Mérida, pero la metodología aplica a cualquier mercado inmobiliario activo en México.</p>
+    </details>
+    <details class="fi rv">
+      <summary>¿Qué pasa si no cumplen la garantía?</summary>
+      <p>Si no entregamos los 60 leads y las 3 propiedades captadas el primer mes — siempre que hayas contactado cada lead en menos de 24 horas — el segundo mes es completamente gratuito. Está firmado en contrato. Ninguna agencia de marketing en México hace esto.</p>
+    </details>
+    <details class="fi rv">
+      <summary>¿Por qué hay plazas limitadas de implementación?</summary>
+      <p>Cada cliente recibe una implementación personalizada: configuramos las campañas, el CRM y los flujos de automatización específicamente para su negocio y su zona. Para hacerlo bien y garantizar los resultados comprometidos, limitamos las incorporaciones por mes. Si el tuyo está completo, te planificamos para el siguiente mes.</p>
+    </details>
+    <details class="fi rv">
+      <summary>¿Qué es la sesión de diagnóstico gratuita?</summary>
+      <p>Es una llamada de 30 minutos donde analizamos tu negocio, tu zona y tu competencia. Te decimos exactamente qué necesitas para captar más propiedades este mes. No es una llamada de ventas — es una consultoría real, sin compromiso ni presión.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section id="final">
+  <div class="container rv">
+    <span class="smile-deco"></span>
+    <div class="lbl" style="margin-bottom:10px">Empieza hoy</div>
+    <h2>30 minutos que pueden<br>cambiar tu mes.</h2>
+    <p>Analizamos tu zona, tu competencia y tu situación actual. Sin compromiso. Si el Programa Pro es para ti, te hacemos la propuesta. Si no, te decimos qué mejorar.</p>
+    <!-- ENLACE DIAGNÓSTICO: reemplaza # por tu URL de reserva -->
+    <a href="#RESERVA_DIAGNOSTICO" class="btn-orange" style="font-size:1rem;padding:16px 40px" target="_blank">
+      Reservar diagnóstico gratuito →
+    </a>
+    <p class="cta-note">Plazas de implementación limitadas este mes · flipup.io/sesion</p>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <span class="footer-logo">
+    <span class="flip">Flip</span><span class="upwrd">Up</span>
+  </span>
+  <p>Sistema de captación automatizado para inmobiliarias · México</p>
+  <p style="margin-top:6px">© 2026 FlipUp · Todos los derechos reservados</p>
+</footer>
+
+<!-- ─── WHATSAPP FLOAT ─── -->
+<a href="https://wa.me/1234567890?text=Hola%2C%20me%20interesa%20FlipUp" class="waf" target="_blank" title="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" width="25" height="25" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ─── SCRIPTS ─── -->
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(
+    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }),
+    { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+  );
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+  // Nav border on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.borderBottomColor =
+      scrollY > 40 ? 'rgba(123,47,255,.28)' : 'var(--border)';
+  });
+</script>
+</body>
+</html>
