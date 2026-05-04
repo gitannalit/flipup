@@ -164,22 +164,28 @@ const chatbotRouter = router({
         precioGrecia: intlPorPais["Greece"],
       };
 
-      // Obtener o crear conversación
-      let conversacion = input.conversacionId
-        ? await getConversacion(input.conversacionId, ctx.user.id)
-        : null;
+      // Obtener o crear conversación (graceful degradation sin BD)
+      let conversacion = null;
+      try {
+        conversacion = input.conversacionId
+          ? await getConversacion(input.conversacionId, ctx.user.id)
+          : null;
+      } catch { /* BD no disponible */ }
 
       const mensajesAnteriores: ChatMessage[] = conversacion
         ? (conversacion.mensajes as ChatMessage[]) ?? []
         : [];
 
       // Obtener contexto de documentos del usuario
-      const docs = await getDocumentos(ctx.user.id);
-      const documentosContexto = docs
-        .filter(d => d.procesado && d.extractoTexto)
-        .map(d => `[${d.nombre}]: ${d.extractoTexto}`)
-        .join("\n\n")
-        .slice(0, 3000);
+      let documentosContexto = "";
+      try {
+        const docs = await getDocumentos(ctx.user.id);
+        documentosContexto = docs
+          .filter(d => d.procesado && d.extractoTexto)
+          .map(d => `[${d.nombre}]: ${d.extractoTexto}`)
+          .join("\n\n")
+          .slice(0, 3000);
+      } catch { /* BD no disponible */ }
 
       // Agregar mensaje del usuario
       const nuevoMensaje: ChatMessage = { role: "user", content: input.mensaje };
@@ -196,27 +202,29 @@ const chatbotRouter = router({
       const mensajeAsistente: ChatMessage = { role: "assistant", content: respuesta };
       const mensajesActualizados = [...mensajesParaIA, mensajeAsistente];
 
-      // Guardar conversación
-      if (conversacion) {
-        await updateConversacion(conversacion.id, ctx.user.id, {
-          mensajes: mensajesActualizados,
-          contextoMercado,
-        });
-      } else {
-        const titulo = input.mensaje.slice(0, 60) + (input.mensaje.length > 60 ? "..." : "");
-        await createConversacion({
-          userId: ctx.user.id,
-          titulo,
-          modeloIa: input.modelo,
-          mensajes: mensajesActualizados,
-          contextoMercado,
-        });
-        const convs = await getConversaciones(ctx.user.id);
-        const firstConv = convs[0];
-        if (firstConv) {
-          conversacion = { ...firstConv, mensajes: mensajesActualizados, contextoMercado } as unknown as typeof conversacion;
+      // Guardar conversación (graceful degradation sin BD)
+      try {
+        if (conversacion) {
+          await updateConversacion(conversacion.id, ctx.user.id, {
+            mensajes: mensajesActualizados,
+            contextoMercado,
+          });
+        } else {
+          const titulo = input.mensaje.slice(0, 60) + (input.mensaje.length > 60 ? "..." : "");
+          await createConversacion({
+            userId: ctx.user.id,
+            titulo,
+            modeloIa: input.modelo,
+            mensajes: mensajesActualizados,
+            contextoMercado,
+          });
+          const convs = await getConversaciones(ctx.user.id);
+          const firstConv = convs[0];
+          if (firstConv) {
+            conversacion = { ...firstConv, mensajes: mensajesActualizados, contextoMercado } as unknown as typeof conversacion;
+          }
         }
-      }
+      } catch { /* BD no disponible, continuar sin persistir */ }
 
       return {
         respuesta,

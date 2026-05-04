@@ -209,13 +209,24 @@ const normalizeToolChoice = (
   return toolChoice;
 };
 
-const resolveApiUrl = () =>
-  ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
-    : "https://forge.manus.im/v1/chat/completions";
+const resolveApiUrl = () => {
+  const url = ENV.forgeApiUrl || process.env.BUILT_IN_FORGE_API_URL || process.env.OPENAI_BASE_URL || "";
+  if (url.trim().length > 0) {
+    // If URL already ends with /chat/completions, use as-is
+    if (url.includes('/chat/completions')) return url;
+    return `${url.replace(/\/$/, "")}/chat/completions`;
+  }
+  return "https://forge.manus.im/v1/chat/completions";
+};
+
+const resolveApiKey = () =>
+  ENV.forgeApiKey ||
+  process.env.BUILT_IN_FORGE_API_KEY ||
+  process.env.OPENAI_API_KEY ||
+  "";
 
 const assertApiKey = () => {
-  if (!ENV.forgeApiKey) {
+  if (!resolveApiKey()) {
     throw new Error("OPENAI_API_KEY is not configured");
   }
 };
@@ -316,7 +327,7 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
+      authorization: `Bearer ${resolveApiKey()}`,
     },
     body: JSON.stringify(payload),
   });
