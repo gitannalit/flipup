@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /chatbot
+Disallow: /calculadora
+Disallow: /mis-ventas
+Disallow: /alertas
+Disallow: /documentos
+Disallow: /perfil
+
+# Sitemap
+Sitemap: https://olixxia.manus.space/sitemap.xml
