@@ -1,11 +1,10 @@
 /**
  * Custom build script for Olixxia
  * 1. Runs vite build (generates manus-runtime + CSS in index.html)
- * 2. Compiles main.tsx with esbuild into app.js
- * 3. Injects app.js script into the index.html before </body>
+ * 2. Compiles main.tsx with esbuild into multiple chunks (code splitting)
+ * 3. Injects chunks into the index.html before </body>
  */
 
-import { build } from 'vite';
 import { build as esbuild } from 'esbuild';
 import fs from 'fs';
 import path from 'path';
@@ -19,20 +18,26 @@ console.log('🔨 Step 1: Vite build (CSS + manus-runtime)...');
 const { execSync } = await import('child_process');
 execSync('npx vite build', { cwd: __dirname, stdio: 'inherit' });
 
-console.log('🔨 Step 2: esbuild compiling main.tsx...');
+console.log('🔨 Step 2: esbuild compiling main.tsx with code splitting...');
 
-// Step 2: Compile main.tsx with esbuild
+// Step 2: Compile main.tsx with esbuild using code splitting (ESM format)
+const assetsDir = path.resolve(__dirname, 'dist/public/assets');
+fs.mkdirSync(assetsDir, { recursive: true });
+
 await esbuild({
   entryPoints: [path.resolve(__dirname, 'client/src/main.tsx')],
   bundle: true,
-  outfile: path.resolve(__dirname, 'dist/public/assets/app.js'),
-  format: 'iife',
+  outdir: assetsDir,
+  entryNames: 'app',
+  chunkNames: 'chunks/[name]-[hash]',
+  format: 'esm',
   platform: 'browser',
   target: ['es2020'],
   minify: true,
   minifyWhitespace: true,
   minifyIdentifiers: true,
   minifySyntax: true,
+  splitting: true,
   define: {
     'process.env.NODE_ENV': '"production"',
     'import.meta.env.VITE_APP_ID': JSON.stringify(process.env.VITE_APP_ID || ''),
@@ -64,13 +69,12 @@ await esbuild({
   },
   external: [],
   logLevel: 'info',
-  splitting: false,
   treeShaking: true,
 });
 
-console.log('✅ App bundle compiled to dist/public/assets/app.js');
+console.log('✅ App bundle compiled with code splitting');
 
-// Step 3: Inject app.js into index.html
+// Step 3: Inject app.js (ESM module) into index.html
 console.log('🔨 Step 3: Injecting app.js into index.html...');
 
 const indexPath = path.resolve(__dirname, 'dist/public/index.html');
@@ -79,11 +83,17 @@ let html = fs.readFileSync(indexPath, 'utf-8');
 // Remove the uncompiled main.tsx script tag
 html = html.replace(/<script type="module" src="\/src\/main\.tsx"><\/script>/g, '');
 
-// Add the compiled app.js before </body>
-html = html.replace('</body>', `  <script src="/assets/app.js"></script>\n</body>`);
+// Add the compiled app.js as ESM module before </body>
+html = html.replace('</body>', `  <script type="module" src="/assets/app.js"></script>\n</body>`);
 
 fs.writeFileSync(indexPath, html);
 
-console.log('✅ Build complete! Files:');
+// Show generated files
+const files = fs.readdirSync(assetsDir);
+const sizes = files.map(f => {
+  const stat = fs.statSync(path.join(assetsDir, f));
+  return `  ${f}: ${(stat.size / 1024).toFixed(0)} KB`;
+});
+console.log('✅ Build complete! Generated files:');
 console.log('  dist/public/index.html');
-console.log('  dist/public/assets/app.js');
+sizes.forEach(s => console.log(s));
